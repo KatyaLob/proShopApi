@@ -1,0 +1,19 @@
+{
+  "name": "proshopapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "postman": "newman run postman/proshopAPI.postman_collection.json -e postman/QAProshop.postman_environment.json",
+    "postman:report": "newman run postman/proshopAPI.postman_collection.json -e postman/QAProshop.postman_environment.json  --reporters=cli,htmlextra",
+    "postman:testrail": "TESTRAIL_SUITEID=1 TESTRAIL_DOMAIN=proshopkl.testrail.io TESTRAIL_USERNAME=katya@alluringbubbleadventures.com TESTRAIL_APIKEY=I00IMKmioGFX1aYRYNqH-aPaRvaSV4FzbTrC2p3VK TESTRAIL_PROJECTID=1 TESTRAIL_TITLE='Postman API Tests' newman run postman/proshopAPI.postman_collection.json -e postman/QAProshop.postman_environment.json --reporters cli,htmlextra,testrail"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "newman": "^5.3.2",
+    "newman-reporter-htmlextra": "^1.22.10",
+    "newman-reporter-testrail": "^1.0.50"
+  }
+}

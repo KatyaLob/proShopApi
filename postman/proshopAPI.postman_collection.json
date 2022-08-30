@@ -1,0 +1,1023 @@
+{
+	"info": {
+		"_postman_id": "cf94779b-5d16-40bb-b92f-455064510ec3",
+		"name": "proshopAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20134422"
+	},
+	"item": [
+		{
+			"name": "duplicate user",
+			"item": [
+				{
+					"name": "Register user",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"username\", \"User_\" + Date.now())"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const req = JSON.parse(pm.request.body);",
+									"",
+									"pm.environment.set('email', req.email)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"{{username}}\",\n  \"email\": \"{{$randomEmail}}\",\n  \"password\": \"Pa33word!\",\n  \"password2\": \"Pa33word!\",\n  \"firstname\": \"Viola\",\n  \"lastname\": \"McCullough\",\n  \"phone\": \"270-413-0060\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "C10 Register userwith existing email",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"username\", \"User_\" + Date.now())"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"{{username}}\",\n  \"email\": \"{{email}}\",\n  \"password\": \"Pa33word!\",\n  \"password2\": \"Pa33word!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "C110 Register userwith existing username",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"{{username}}\",\n  \"email\": \"{{$randomEmail}}\",\n  \"password\": \"Pa33word!\",\n  \"password2\": \"Pa33word!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Register user with valid data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();",
+							"const req = JSON.parse(pm.request.body)",
+							"//console.log (req)",
+							"",
+							"pm.test(\"C1 Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"C1 Response time is less than 500ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});",
+							"",
+							"pm.test(\"C1 Body has valid message\", function () {",
+							"    pm.expect(response.msg).to.eq(\"Register successful!\")",
+							"})",
+							"",
+							"pm.test(\"C1 Body has valid success\", function () {",
+							"    pm.expect(response.success).to.be.true;",
+							"})",
+							"",
+							"pm.test(\"C1 Body has valid token\", function () {",
+							"    pm.expect(response.token).to.be.not.empty;",
+							"})",
+							"",
+							"pm.test(\"C1 Body has valid user\", function () {",
+							"    pm.expect(response.user.firstname).to.eq(req.firstname);",
+							"})",
+							"",
+							"pm.test(\"C1 Body has valid id\", function () {         //требуется реальный номер? ",
+							"    pm.expect(response.user.id).to.not.be.null;",
+							"})",
+							"",
+							"pm.test(\"C1 Body has valid username\", function () {",
+							"    pm.expect(response.user.username).to.eq(req.username);",
+							"})",
+							"",
+							"pm.test(\"C1 Body has valid firstname\", function () {",
+							"    pm.expect(response.user.firstname).to.eq(req.firstname);",
+							"})",
+							"",
+							"pm.test(\"C1 Body has valid lastname\", function () {",
+							"    pm.expect(response.user.lastname).to.eq(req.lastname);",
+							"})",
+							"",
+							"pm.test(\"C1 Body has valid name\", function () {",
+							"    pm.expect(response.user.name).to.not.be.empty;",
+							"})",
+							"",
+							"pm.test(\"C1 Body has valid email\", function () {",
+							"    pm.expect(response.user.email).to.eq(req.email);",
+							"})",
+							"",
+							"pm.test(\"C1 Body has valid isAdmin\", function () {",
+							"    pm.expect(response.user.isAdmin).to.be.false;",
+							"})",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"username\", \"User_\" + Date.now())"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"{{username}}\",\n  \"email\": \"{{$randomEmail}}\",\n  \"password\": \"Pa33word!\",\n  \"password2\": \"Pa33word!\",\n  \"firstname\": \"Viola\",\n  \"lastname\": \"McCullough\",\n  \"phone\": \"270-413-0060\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "C2 Register user with required data",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"username\", \"User_\" + Date.now())"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();",
+							"const req = JSON.parse(pm.request.body)",
+							"//console.log (req)",
+							"",
+							"pm.test(\"C2 Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"C2 Response time is less than 500ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});",
+							"",
+							"pm.test(\"C2 Body has valid message\", function () {",
+							"    pm.expect(response.msg).to.eq(\"Register successful!\")",
+							"})",
+							"",
+							"pm.test(\"C2 Body has valid success\", function () {",
+							"    pm.expect(response.success).to.be.true;",
+							"})",
+							"",
+							"pm.test(\"C2 Body has valid token\", function () {",
+							"    pm.expect(response.token).to.be.not.empty;",
+							"})",
+							"",
+							"pm.test(\"C2 Body has valid id\", function () {         //требуется реальный номер? ",
+							"    pm.expect(response.user.id).to.not.be.null;",
+							"})",
+							"",
+							"pm.test(\"C2 Body has valid username\", function () {",
+							"    pm.expect(response.user.username).to.eq(req.username);",
+							"})",
+							"",
+							"pm.test(\"C2 Body has valid name\", function () {",
+							"    pm.expect(response.user.name).to.not.be.empty;",
+							"})",
+							"",
+							"pm.test(\"C2 Body has valid email\", function () {",
+							"    pm.expect(response.user.email).to.eq(req.email);",
+							"})",
+							"",
+							"pm.test(\"C2 Body has valid isAdmin\", function () {",
+							"    pm.expect(response.user.isAdmin).to.be.false;",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"{{$randomUserName}}\",\n  \"email\": \"{{$randomEmail}}\",\n  \"password\": \"Pa33word!\",\n  \"password2\": \"Pa33word!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/users/",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"users",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "C4 Register user without email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();",
+							"const req = JSON.parse(pm.request.body)",
+							"//console.log (req)",
+							"",
+							"pm.test(\"C4 Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"C4 Response time is less than 500ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});",
+							"",
+							"pm.test(\"C4 Body has valid message\", function () {",
+							"    pm.expect(response.msg).to.eq(\"Register successful!\")",
+							"})",
+							"",
+							"pm.test(\"C4 Body has valid success\", function () {",
+							"    pm.expect(response.success).to.be.true;",
+							"})",
+							"",
+							"pm.test(\"C4 Body has valid token\", function () {",
+							"    pm.expect(response.token).to.be.not.empty;",
+							"})",
+							"",
+							"pm.test(\"C4 Body has valid id\", function () {         //требуется реальный номер? ",
+							"    pm.expect(response.user.id).to.not.be.null;",
+							"})",
+							"",
+							"pm.test(\"C4 Body has valid username\", function () {",
+							"    pm.expect(response.user.username).to.eq(req.username);",
+							"})",
+							"",
+							"pm.test(\"C4 Body has valid name\", function () {",
+							"    pm.expect(response.user.name).to.not.be.empty;",
+							"})",
+							"",
+							"pm.test(\"C4 Body has valid email\", function () {",
+							"    pm.expect(response.user.email).to.eq(req.email);",
+							"})",
+							"",
+							"pm.test(\"C4 Body has valid isAdmin\", function () {",
+							"    pm.expect(response.user.isAdmin).to.be.false;",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"Rodrick_Adams\",\n  \"email\": \"Elenora58@gmail.com\",\n  \"password\": \"Pa33word!\",\n  \"password2\": \"Pa33word!\",\n  \"firstname\": \"Viola\",\n  \"lastname\": \"McCullough\",\n  \"phone\": \"270-413-0060\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/users/",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"users",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "C5 Register user without username",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"Rodrick_Adams\",\n  \"email\": \"Elenora58@gmail.com\",\n  \"password\": \"Pa33word!\",\n  \"password2\": \"Pa33word!\",\n  \"firstname\": \"Viola\",\n  \"lastname\": \"McCullough\",\n  \"phone\": \"270-413-0060\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/users/",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"users",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "C6 Register user without password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"Rodrick_Adams\",\n  \"email\": \"Elenora58@gmail.com\",\n  \"password\": \"\",\n  \"password2\": \"Pa33word!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/users/withoutPassword",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"withoutPassword"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "C7  Register user without password2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const req =JSON.parse(pm.request.body);",
+							"",
+							"pm.test(\"C7 Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"C7 Response time is less than 500ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});",
+							"",
+							"pm.test(\"C7 Body has valid stack\", function(){",
+							"    pm.expect(response.stack).to.be.null;",
+							"});",
+							"",
+							"pm.test(\"C7 Body has valid message\", function(){",
+							"    pm.expect(response.message).to.eq(\"Please fill in mandatory fields\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"Rodrick_Adams\",\n  \"email\": \"Elenora58@gmail.com\",\n  \"password\": \"Pa33word!\",\n  \"password2\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "C8  Register user with username less than 3 char",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"username\", \"User_\" + Date.now())"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const req =JSON.parse(pm.request.body);",
+							"const response = pm.response.json();",
+							"",
+							"pm.test(\"C8 Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"C8 Response time is less than 500ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});",
+							"",
+							"pm.test(\"C8 Body has username with correct length\", function(){",
+							"    pm.expect(req.username).to.have.lengthOf.at.least(3);",
+							"});",
+							"",
+							"pm.test(\"C8 Body has valid stack\", function(){",
+							"    pm.expect(response.stack).to.be.null;",
+							"});",
+							"",
+							"pm.test(\"C8 Body has valid message\", function(){",
+							"    pm.expect(response.message).to.eq(\"Username should be at least three characters long.\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"Ro\",\n  \"email\": \"{{$randomEmail}}\",\n  \"password\": \"Pa33word!\",\n  \"password2\": \"Pa33word!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/users/",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"users",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "C9  Register user more than 20 char",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();",
+							"const req =JSON.parse(pm.request.body);",
+							"",
+							"pm.test(\"C9 Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"C9 Response time is less than 500ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});",
+							"",
+							"pm.test(\"C9 Body has username with correct length\", function(){",
+							"    pm.expect(req.username).to.have.lengthOf.at.most(20);",
+							"});",
+							"",
+							"pm.test(\"C9 Body has valid stack\", function(){",
+							"    pm.expect(response.stack).to.be.null;",
+							"});",
+							"",
+							"pm.test(\"C9 Body has valid message\", function(){",
+							"    pm.expect(response.message).to.eq(\"Username should be 20 characters maximum.\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"Rodrick_Adamsssssssss\",\n  \"email\": \"{{$randomEmail}}\",\n  \"password\": \"Pa33word!\",\n  \"password2\": \"Pa33word!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "T25 sign up a new user with firstname contains (special chars, numbers, russian)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();",
+							"const req =JSON.parse(pm.request.body);",
+							"",
+							"pm.test(\"C9 Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"C9 Response time is less than 500ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});",
+							"",
+							"pm.test(\"C9 Body has username with correct length\", function(){",
+							"    pm.expect(req.username).to.have.lengthOf.at.most(20);",
+							"});",
+							"",
+							"pm.test(\"C9 Body has valid stack\", function(){",
+							"    pm.expect(response.stack).to.be.null;",
+							"});",
+							"",
+							"pm.test(\"C9 Body has valid message\", function(){",
+							"    pm.expect(response.message).to.eq(\"Username should be 20 characters maximum.\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"username\", \"User_\" + Date.now())"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"{{username}}\",\n  \"email\": \"{{$randomEmail}}\",\n  \"password\": \"Pa33word!\",\n  \"password2\": \"Pa33word!\",\n  \"firstname\": \"Мария 21$\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "C3 Login with valid credentils",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();",
+							"const req = JSON.parse(pm.request.body);",
+							"",
+							"pm.test(\"C3 Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"C3 Response time is less than 500ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});",
+							"",
+							"pm.test(\"C3 Body has valid message\", function () {",
+							"    pm.expect(response.msg).to.eq(\"Login successfull!\");",
+							"});",
+							"",
+							"pm.test(\"C3 Body has valid success\", function () {",
+							"    pm.expect(response.success).to.be.true;",
+							"});",
+							"",
+							"pm.test(\"C3 Body has valid token\", function () {",
+							"    pm.expect(response.token).to.be.not.empty;",
+							"});",
+							"",
+							"pm.test(\"C3 Body has correct username\" , function () {",
+							"    pm.expect(response.user.id).to.be.not.empty;",
+							"});",
+							"",
+							"pm.test(\"C3 Body has correct username\" , function () {",
+							"    pm.expect(response.user.username).to.be.not.empty;",
+							"});",
+							"",
+							"pm.test(\"C3 Body has correct email\" , function () {",
+							"    pm.expect(response.user.email).to.eq(req.email);",
+							"});",
+							"",
+							"pm.test(\"C3 Body has correct Admin\" , function () {",
+							"    pm.expect(response.user.isAdmin).to.be.false;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"Pa33word!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/users/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "C12 Login with invalid email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const req = JSON.parse(pm.request.body);",
+							"const response = pm.response.json();",
+							"",
+							"pm.test(\"C12 Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"C12 Response time is less than 500ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});",
+							"",
+							"pm.test(\"C12 Body has valid message\", function () {",
+							"    pm.expect(response.message).to.eq(\"Oops! Your email or password was incorrect. Please try again.\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"C12 Body has valid stack\", function () {",
+							"    pm.expect(response.stack).to.be.null;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"{{$randomEmail}}\",\n    \"password\": \"Pa33word!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/users/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "C13 Login with invalid password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const req = JSON.parse(pm.request.body);",
+							"const response = pm.response.json();",
+							"",
+							"pm.test(\"C12 Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"C12 Response time is less than 500ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});",
+							"",
+							"pm.test(\"C12 Body has valid message\", function () {",
+							"    pm.expect(response.message).to.eq(\"Oops! Your email or password was incorrect. Please try again.\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"C12 Body has valid stack\", function () {",
+							"    pm.expect(response.stack).to.be.null;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"Elenora58@gmail.com\",\n    \"password\": \"Poop\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/users/login/withInvalidPassword",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"login",
+						"withInvalidPassword"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
