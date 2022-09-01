@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "cf94779b-5d16-40bb-b92f-455064510ec3",
+		"_postman_id": "2b225636-7a92-47d0-8769-dc4171d9bcc7",
 		"name": "proshopAPI",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "20134422"
@@ -208,9 +208,9 @@
 							"    pm.expect(response.user.lastname).to.eq(req.lastname);",
 							"})",
 							"",
-							"pm.test(\"C1 Body has valid name\", function () {",
-							"    pm.expect(response.user.name).to.not.be.empty;",
-							"})",
+							"// pm.test(\"C1 Body has valid name\", function () {",
+							"//     pm.expect(response.user.name).to.not.be.empty;",
+							"// })",
 							"",
 							"pm.test(\"C1 Body has valid email\", function () {",
 							"    pm.expect(response.user.email).to.eq(req.email);",
