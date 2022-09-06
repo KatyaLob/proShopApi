@@ -49,10 +49,10 @@ jobs:
       - name: Run API Tests
         run: npm run postman
         
-         - name: Upload a Build Artifact
-             if: always()
-            uses: actions/upload-artifact@v3.1.0
-            with:
+      - name: Upload a Build Artifact
+        if: always()
+        uses: actions/upload-artifact@v3.1.0
+        with:
             name: RunReports
             path: newman
         
