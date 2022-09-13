@@ -6,12 +6,20 @@
   "scripts": {
     "postman": "newman run postman/proshopAPI.postman_collection.json -e postman/QAProshop1.postman_environment.json",
     "postman:report": "newman run postman/proshopAPI.postman_collection.json -e postman/QAProshop1.postman_environment.json  --reporters=cli,htmlextra",
-    "postman:testrail": "TESTRAIL_SUITEID=1 TESTRAIL_DOMAIN=proshopkl.testrail.io TESTRAIL_USERNAME=katya@alluringbubbleadventures.com TESTRAIL_APIKEY=I00IMKmioGFX1aYRYNqH-aPaRvaSV4FzbTrC2p3VK TESTRAIL_PROJECTID=1 TESTRAIL_TITLE='Postman API Tests' newman run postman/proshopAPI.postman_collection.json -e postman/QAProshop1.postman_environment.json --reporters cli,htmlextra,testrail"
+    "postman:testrail": "TESTRAIL_SUITEID=1 TESTRAIL_DOMAIN=proshopkl.testrail.io TESTRAIL_USERNAME=katya@alluringbubbleadventures.com TESTRAIL_APIKEY=I00IMKmioGFX1aYRYNqH-aPaRvaSV4FzbTrC2p3VK TESTRAIL_PROJECTID=1 TESTRAIL_TITLE='Postman API Tests' newman run postman/proshopAPI.postman_collection.json -e postman/QAProshop1.postman_environment.json --reporters cli,htmlextra,testrail",
+    "test": "npx mocha"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.19.0",
+    "@babel/preset-env": "^7.19.0",
+    "@babel/register": "^7.18.9",
+    "@faker-js/faker": "^7.5.0",
+    "axios": "^0.27.2",  
+    "chai": "^4.3.6",
+    "mocha": "^10.0.0",
     "newman": "^5.3.2",
     "newman-reporter-htmlextra": "^1.22.10",
     "newman-reporter-testrail": "^1.0.50"
